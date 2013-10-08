@@ -43,6 +43,8 @@ new String:g_CurrrentType[64];
 
 new Handle:attributeTracking[WeaponMode][AttributeType];
 
+new Handle:g_Kv_AttributeTracking;
+
 public Plugin:myinfo = 
 {
 	name = "TF2 Weapon Replacements",
@@ -63,6 +65,44 @@ public OnPluginStart()
 public OnConfigsExecuted()
 {
 	
+}
+
+ReadConfig()
+{
+	// Create the initial reverse-lookup tables
+	if (g_Kv_AttributeTracking != INVALID_HANDLE)
+	{
+		CloseHandle(g_Kv_AttributeTracking);
+	}
+	g_Kv_AttributeTracking = CreateKeyValues("Reverse Weapon Modifications");
+	
+	KvJumpToKey(g_Kv_AttributeTracking, "onhit", true);
+	KvGoBack(g_Kv_AttributeTracking);
+	
+	KvJumpToKey(g_Kv_AttributeTracking, "ontakedamage", true);
+	KvGoBack(g_Kv_AttributeTracking);
+	
+	KvJumpToKey(g_Kv_AttributeTracking, "ongive", true);
+	
+	KvJumpToKey(g_Kv_AttributeTracking, "replace", true);
+	KvGoBack(g_Kv_AttributeTracking);
+	
+	KvJumpToKey(g_Kv_AttributeTracking, "clearattribs", true);
+	KvGoBack(g_Kv_AttributeTracking);
+
+	KvGoBack(g_Kv_AttributeTracking);
+	
+	KvJumpToKey(g_Kv_AttributeTracking, "postinventory", true);
+	
+	KvJumpToKey(g_Kv_AttributeTracking, "removeattrib", true);
+	KvGoBack(g_Kv_AttributeTracking);
+	
+	KvJumpToKey(g_Kv_AttributeTracking, "addattrib", true);
+	KvGoBack(g_Kv_AttributeTracking);
+	
+	KvRewind(g_Kv_AttributeTracking);
+
+	new kv_trackingFile = CreateKeyValues("Weapon Modifications");
 }
 
 public SMCResult:SectionStart(Handle:smc, const String:name[], bool:opt_quotes)
